@@ -43,6 +43,9 @@ function startGame() {
 function gameLoop() {
     changingDirection = false;
     update();
+    if (!isRunning) {
+        return;
+    }
     if (checkGameOver()) {
         endGame();
         return;
@@ -62,20 +65,27 @@ function update() {
             highScoreEl.textContent = highScore;
             localStorage.setItem('snakeHighScore', highScore);
         }
-        spawnFood();
+        if (!spawnFood()) {
+            draw();
+            endGame("你贏了！", `你的最終得分: ${score}`);
+            return;
+        }
     } else {
         snake.pop();
     }
 }
 
 function spawnFood() {
-    food.x = Math.floor(Math.random() * tileCount);
-    food.y = Math.floor(Math.random() * tileCount);
-    snake.forEach(part => {
-        if (part.x === food.x && part.y === food.y) {
-            spawnFood();
-        }
-    });
+    if (snake.length >= tileCount * tileCount) {
+        return false;
+    }
+
+    do {
+        food.x = Math.floor(Math.random() * tileCount);
+        food.y = Math.floor(Math.random() * tileCount);
+    } while (snake.some(part => part.x === food.x && part.y === food.y));
+
+    return true;
 }
 
 function checkGameOver() {
@@ -125,11 +135,11 @@ function draw() {
     ctx.shadowBlur = 0;
 }
 
-function endGame() {
+function endGame(title = "遊戲結束！", subtext = `你的最終得分: ${score}`) {
     clearInterval(gameInterval);
     isRunning = false;
-    overlayTitle.textContent = "遊戲結束！";
-    overlaySub.textContent = `你的最終得分: ${score}`;
+    overlayTitle.textContent = title;
+    overlaySub.textContent = subtext;
     overlay.classList.remove('opacity-0', 'pointer-events-none');
 }
 
@@ -155,8 +165,14 @@ function changeDirection(dir) {
 }
 
 window.addEventListener('keydown', e => {
-    if (['ArrowUp', 'KeyW'].includes(e.code)) { e.preventDefault(); changeDirection('UP'); }
-    if (['ArrowDown', 'KeyS'].includes(e.code)) { e.preventDefault(); changeDirection('DOWN'); }
-    if (['ArrowLeft', 'KeyA'].includes(e.code)) { e.preventDefault(); changeDirection('LEFT'); }
-    if (['ArrowRight', 'KeyD'].includes(e.code)) { e.preventDefault(); changeDirection('RIGHT'); }
+    const key = e.key.toLowerCase();
+    const isUp = e.key === 'ArrowUp' || e.code === 'KeyW' || key === 'w';
+    const isDown = e.key === 'ArrowDown' || e.code === 'KeyS' || key === 's';
+    const isLeft = e.key === 'ArrowLeft' || e.code === 'KeyA' || key === 'a';
+    const isRight = e.key === 'ArrowRight' || e.code === 'KeyD' || key === 'd';
+
+    if (isUp) { e.preventDefault(); changeDirection('UP'); }
+    if (isDown) { e.preventDefault(); changeDirection('DOWN'); }
+    if (isLeft) { e.preventDefault(); changeDirection('LEFT'); }
+    if (isRight) { e.preventDefault(); changeDirection('RIGHT'); }
 });
