@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>貪食蛇遊戲 - Snake Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between p-4 md:p-8">
+
+    <header class="w-full max-w-md text-center mb-4">
+        <h1 class="text-3xl font-extrabold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent mb-2">
+            經典貪食蛇
+        </h1>
+        <p class="text-slate-400 text-sm">使用鍵盤方向鍵或下方按鈕控制移動</p>
+    </header>
+
+    <main class="w-full max-w-md flex flex-col items-center space-y-4">
+        <!-- 分數面板 -->
+        <div class="flex justify-between w-full px-6 py-3 glass rounded-2xl shadow-lg font-semibold">
+            <div class="flex items-center gap-2">
+                <span class="text-slate-400 text-sm">分數:</span>
+                <span id="score" class="text-emerald-400 text-xl">0</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-slate-400 text-sm">最高分:</span>
+                <span id="highScore" class="text-amber-400 text-xl">0</span>
+            </div>
+        </div>
+
+        <!-- 遊戲畫布與覆蓋層 -->
+        <div class="relative">
+            <canvas id="gameCanvas" width="360" height="360"></canvas>
+            <div id="gameOverlay" class="absolute inset-0 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center rounded-2xl transition-all duration-300 p-6 text-center">
+                <h3 id="overlayTitle" class="text-2xl font-bold text-white mb-2">貪食蛇大挑戰</h3>
+                <p id="overlaySub" class="text-slate-300 text-sm mb-6">準備好挑戰你的最高紀錄了嗎？</p>
+                <button onclick="startGame()" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold px-8 py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+                    開始遊戲
+                </button>
+            </div>
+        </div>
+
+        <!-- 手機觸控控制按鈕 -->
+        <div class="grid grid-cols-3 gap-3 w-full max-w-[260px] pt-2">
+            <div></div>
+            <button onclick="changeDirection('UP')" class="glass hover:bg-slate-700 active:bg-emerald-600 p-4 rounded-2xl text-xl flex items-center justify-center shadow-md transition-all">⬆️</button>
+            <div></div>
+            <button onclick="changeDirection('LEFT')" class="glass hover:bg-slate-700 active:bg-emerald-600 p-4 rounded-2xl text-xl flex items-center justify-center shadow-md transition-all">⬅️</button>
+            <button onclick="changeDirection('DOWN')" class="glass hover:bg-slate-700 active:bg-emerald-600 p-4 rounded-2xl text-xl flex items-center justify-center shadow-md transition-all">⬇️</button>
+            <button onclick="changeDirection('RIGHT')" class="glass hover:bg-slate-700 active:bg-emerald-600 p-4 rounded-2xl text-xl flex items-center justify-center shadow-md transition-all">➡️</button>
+        </div>
+    </main>
+
+    <footer class="mt-8 text-xs text-slate-500 text-center">
+        GitHub Ready Web App • Built with HTML, CSS & JavaScript
+    </footer>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
